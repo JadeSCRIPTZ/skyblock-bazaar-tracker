@@ -1,36 +1,51 @@
 const table = document.getElementById("bazaar");
-const search = document.getElementById("search");
 
-let allItems = [];
+// Taxa bazaar ~1.25%
+const TAX = 0.9875;
 
 fetch("https://api.hypixel.net/skyblock/bazaar")
   .then(res => res.json())
   .then(data => {
-    allItems = Object.entries(data.products);
-    render(allItems);
+    const items = [];
+
+    for (const name in data.products) {
+      const qs = data.products[name].quick_status;
+
+      const buy = qs.buyPrice;
+      const sell = qs.sellPrice;
+
+      if (buy <= 0 || sell <= 0) continue;
+
+      const profit = sell * TAX - buy;
+
+      if (profit > 0) {
+        items.push({
+          name,
+          buy,
+          sell,
+          profit
+        });
+      }
+    }
+
+    items.sort((a, b) => b.profit - a.profit);
+    render(items);
+  })
+  .catch(err => {
+    console.error("Eroare API:", err);
   });
 
 function render(items) {
   table.innerHTML = "";
 
-  items.forEach(([name, info]) => {
-    const buy = info.quick_status.buyPrice;
-    const sell = info.quick_status.sellPrice;
-
+  items.forEach(item => {
     const row = document.createElement("tr");
     row.innerHTML = `
-      <td>${name}</td>
-      <td>${buy.toFixed(2)}</td>
-      <td>${sell.toFixed(2)}</td>
+      <td>${item.name}</td>
+      <td>${item.buy.toFixed(1)}</td>
+      <td>${item.sell.toFixed(1)}</td>
+      <td class="profit">+${item.profit.toFixed(1)}</td>
     `;
     table.appendChild(row);
   });
 }
-
-search.addEventListener("input", e => {
-  const value = e.target.value.toLowerCase();
-  const filtered = allItems.filter(([name]) =>
-    name.toLowerCase().includes(value)
-  );
-  render(filtered);
-});
