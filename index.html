@@ -1,26 +1,24 @@
-<!DOCTYPE html>
-<html lang="ro">
-<head>
-  <meta charset="UTF-8">
-  <title>Hypixel Bazaar</title>
-  <link rel="stylesheet" href="style.css">
-</head>
 <body>
-  <h1>Hypixel SkyBlock Bazaar</h1>
+  <div class="dashboard">
+    <div class="panel">
+      <div class="header">
+        <h1>SkyBlock Bazaar Flipper</h1>
+        <span class="badge">LIVE DATA</span>
+      </div>
 
-  <input type="text" id="search" placeholder="Caută item..." />
-
-  <table>
-    <thead>
-      <tr>
-        <th>Item</th>
-        <th>Buy Price</th>
-        <th>Sell Price</th>
-      </tr>
-    </thead>
-    <tbody id="bazaar"></tbody>
-  </table>
+      <table>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Buy Order</th>
+            <th>Sell Offer</th>
+            <th>Profit</th>
+          </tr>
+        </thead>
+        <tbody id="bazaar"></tbody>
+      </table>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
-</html>
