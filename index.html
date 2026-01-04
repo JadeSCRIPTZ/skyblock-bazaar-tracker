@@ -9,221 +9,139 @@
 
   <style>
     :root {
-      --bg: #0f1115;
-      --card: #171a21;
-      --text: #e6e6e6;
-      --muted: #9aa0aa;
-      --accent: #ff8c2a;
-      --border: #262a33;
+      --bg:#0f1115; --card:#171a21; --text:#e6e6e6;
+      --muted:#9aa0aa; --accent:#ff8c2a; --border:#262a33;
     }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(180deg, #0f1115, #0b0d12);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    *{box-sizing:border-box}
+    body{
+      margin:0;font-family:Inter,sans-serif;
+      background:linear-gradient(180deg,#0f1115,#0b0d12);
+      color:var(--text);min-height:100vh;
+      display:flex;align-items:center;justify-content:center;
     }
-
-    .container {
-      width: 100%;
-      max-width: 900px;
-      padding: 24px;
+    .container{max-width:900px;width:100%;padding:24px}
+    .card{
+      background:var(--card);border:1px solid var(--border);
+      border-radius:18px;padding:28px;
+      box-shadow:0 10px 30px rgba(0,0,0,.4)
     }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 28px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    h1{margin:0 0 6px;font-size:30px}
+    .subtitle{color:var(--muted);margin-bottom:16px}
+    .tabs{display:flex;gap:12px;margin-bottom:20px}
+    .tab{flex:1;padding:12px;border-radius:12px;
+      background:#0f1218;border:1px solid var(--border);
+      color:var(--text);font-weight:600;cursor:pointer}
+    .tab.active{background:var(--accent);color:#111}
+    .input-group{display:flex;gap:12px;margin-bottom:24px}
+    input{
+      flex:1;padding:14px;border-radius:12px;
+      border:1px solid var(--border);
+      background:#0f1218;color:var(--text)
     }
-
-    h1 {
-      margin: 0 0 6px 0;
-      font-size: 30px;
-      font-weight: 700;
+    button{
+      padding:14px 22px;border-radius:12px;
+      border:none;background:var(--accent);
+      color:#111;font-weight:700;cursor:pointer
     }
-
-    .subtitle {
-      color: var(--muted);
-      margin-bottom: 24px;
+    table{width:100%;border-collapse:collapse;margin-top:20px}
+    th,td{padding:14px;border-bottom:1px solid var(--border)}
+    th{color:var(--muted);font-size:14px}
+    .total{
+      margin-top:20px;padding:16px;border-radius:14px;
+      background:#0f1218;border:1px solid var(--border);
+      display:flex;justify-content:space-between;font-weight:700
     }
-
-    .input-group {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    input {
-      flex: 1;
-      padding: 14px 16px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: #0f1218;
-      color: var(--text);
-      font-size: 16px;
-    }
-
-    input:focus {
-      outline: none;
-      border-color: var(--accent);
-    }
-
-    button {
-      padding: 14px 22px;
-      border-radius: 12px;
-      border: none;
-      background: var(--accent);
-      color: #111;
-      font-weight: 700;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    th, td {
-      text-align: left;
-      padding: 14px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    th {
-      color: var(--muted);
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .total {
-      margin-top: 20px;
-      padding: 16px;
-      border-radius: 14px;
-      background: #0f1218;
-      border: 1px solid var(--border);
-      font-size: 18px;
-      font-weight: 700;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .accent { color: var(--accent); }
-
-    .footer {
-      margin-top: 18px;
-      font-size: 13px;
-      color: var(--muted);
-    }
+    .accent{color:var(--accent)}
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <div class="card">
-      <h1>Arachne Crystal Calculator</h1>
-      <div class="subtitle">Hypixel SkyBlock • Live prices from skyblock.finance</div>
+<div class="container">
+  <div class="card">
+    <h1>Arachne Crystal Calculator</h1>
+    <div class="subtitle">Hypixel SkyBlock • Select price source</div>
 
-      <div class="input-group">
-        <input id="amount" type="number" min="1" placeholder="How many crystals? (ex: 10)">
-        <button onclick="calculate()">Calculate</button>
-      </div>
-
-      <table id="table" style="display:none;">
-        <thead>
-          <tr>
-            <th>Item</th>
-            <th>Total Amount</th>
-            <th>Price (each)</th>
-            <th>Total Cost</th>
-          </tr>
-        </thead>
-        <tbody id="tbody"></tbody>
-      </table>
-
-      <div class="total" id="grandTotal" style="display:none;"></div>
-
-      <div class="footer">
-        Prices are fetched live from skyblock.finance (Bazaar). Refresh every 60s.
-      </div>
+    <div class="tabs">
+      <div class="tab active" id="manualTab" onclick="setMode('manual')">Manual Prices</div>
+      <div class="tab" id="liveTab" onclick="setMode('live')">Live (skyblock.finance)</div>
     </div>
+
+    <div class="input-group">
+      <input id="amount" type="number" min="1" placeholder="How many crystals? (ex: 10)">
+      <button onclick="calculate()">Calculate</button>
+    </div>
+
+    <table id="table" style="display:none">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Total Amount</th>
+          <th>Price (each)</th>
+          <th>Total Cost</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+
+    <div class="total" id="grandTotal" style="display:none"></div>
   </div>
+</div>
 
-  <script>
-    // Proxy needed because of CORS (works on GitHub Pages)
-    const PROXY = 'https://api.allorigins.win/raw?url=';
+<script>
+const PROXY = 'https://api.allorigins.win/raw?url=';
+let MODE = 'manual';
 
-    const ITEMS = {
-      ARACHNE_FRAGMENT: {
-        name: 'Arachne Fragment',
-        perCrystal: 3,
-        url: 'https://skyblock.finance/items/ARACHNE_FRAGMENT'
-      },
-      SPIDER_EYE: {
-        name: 'Spider Eye',
-        perCrystal: 8,
-        url: 'https://skyblock.finance/items/SPIDER_EYE'
-      },
-      STRING: {
-        name: 'String',
-        perCrystal: 30,
-        url: 'https://skyblock.finance/items/STRING'
-      }
-    };
+function setMode(mode){
+  MODE = mode;
+  manualTab.classList.toggle('active', mode==='manual');
+  liveTab.classList.toggle('active', mode==='live');
+}
 
-    async function fetchPrice(item) {
-      const res = await fetch(PROXY + encodeURIComponent(item.url));
-      const html = await res.text();
+const ITEMS = [
+  {name:'Arachne Fragment', per:3, manual:83329, url:'https://skyblock.finance/items/ARACHNE_FRAGMENT'},
+  {name:'Spider Eye', per:8, manual:9399, url:'https://skyblock.finance/items/SPIDER_EYE'},
+  {name:'String', per:30, manual:35892, url:'https://skyblock.finance/items/STRING'}
+];
 
-      // Extract first price number found (sell price)
-      const match = html.match(/Sell Price<[^>]*>\s*<[^>]*>([0-9,]+)/i);
-      if (!match) return 0;
-      return parseInt(match[1].replace(/,/g, ''));
-    }
+async function getPrice(item){
+  if(MODE==='manual') return item.manual;
+  try{
+    const r = await fetch(PROXY+encodeURIComponent(item.url));
+    const t = await r.text();
+    const m = t.match(/Sell Price<[^>]*>\\s*<[^>]*>([0-9,]+)/i);
+    return m ? parseInt(m[1].replace(/,/g,'')) : item.manual;
+  }catch{ return item.manual }
+}
 
-    async function calculate() {
-      const amount = parseInt(document.getElementById('amount').value);
-      if (!amount || amount <= 0) return;
+async function calculate(){
+  const amt = +amount.value;
+  if(!amt) return;
 
-      const tbody = document.getElementById('tbody');
-      tbody.innerHTML = '';
+  tbody.innerHTML='';
+  let total=0;
 
-      let total = 0;
+  for(const i of ITEMS){
+    const price = await getPrice(i);
+    const qty = i.per * amt;
+    const cost = price * qty;
+    total += cost;
 
-      for (const key in ITEMS) {
-        const item = ITEMS[key];
-        const price = await fetchPrice(item);
-        const qty = item.perCrystal * amount;
-        const cost = price * qty;
-        total += cost;
+    tbody.innerHTML += `
+      <tr>
+        <td>${i.name}</td>
+        <td>${qty.toLocaleString()}</td>
+        <td>${price.toLocaleString()} coins</td>
+        <td>${cost.toLocaleString()} coins</td>
+      </tr>`;
+  }
 
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td>${item.name}</td>
-          <td>${qty.toLocaleString()}</td>
-          <td>${price.toLocaleString()} coins</td>
-          <td>${cost.toLocaleString()} coins</td>
-        `;
-        tbody.appendChild(row);
-      }
+  table.style.display='table';
+  grandTotal.style.display='flex';
+  grandTotal.innerHTML = `
+    <span>Total for <span class="accent">${amt}</span> crystals</span>
+    <span class="accent">${total.toLocaleString()} coins</span>`;
+}
+</script>
 
-      document.getElementById('table').style.display = 'table';
-      const gt = document.getElementById('grandTotal');
-      gt.style.display = 'flex';
-      gt.innerHTML = `
-        <span>Total cost for <span class="accent">${amount}</span> crystals</span>
-        <span class="accent">${total.toLocaleString()} coins</span>
-      `;
-    }
-  </script>
 </body>
 </html>
